@@ -1,6 +1,7 @@
 const express = require('express')
-const app = express()
 require('dotenv').config()
+
+const app = express()
 const PORT = process.env.PORT || 8080
 
 console.log(`Node.js ${process.version}`)
@@ -8,9 +9,11 @@ console.log(`Node.js ${process.version}`)
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.json({ msg: "Hello again Render!" })
+    res.json({ msg: "Lektionsexempel 0.3" })
 })
 
+const notesRouter = require('./routes/notes')
+app.use('/notes', notesRouter)
 
 app.listen(PORT, () => {
     try {
