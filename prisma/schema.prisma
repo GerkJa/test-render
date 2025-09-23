@@ -15,3 +15,13 @@ model notes {
   created_at DateTime? @default(now()) @db.Timestamp(6)
   updated_at DateTime? @default(now()) @db.Timestamp(6)
 }
+
+model User {
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+  emain       String    @unique
+  role        String    @default("user")
+  name        String?
+  password    String?
+}
