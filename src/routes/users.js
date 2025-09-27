@@ -7,9 +7,36 @@ require('dotenv').config()
 const router = express.Router()
 const prisma = new PrismaClient()
 
+//Test to see if db connects table --- Remove!!
+router.get('/test', async (req, res) => {
+    const users = await prisma.user.findMany({})
+    res.json(users)
+})
 
+//Register new user
+router.post('/register', async (req, res) => {
+    console.log("Body", req.body)
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 12) //password+salt
+        const newUser = await prisma.user.create({
+            data: {
+                email: req.body.email,
+                password: hashedPassword,
+                name: req.body.name
+            }
+        })
+        res.json({msg: "New user created", username: newUser.name})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({msg: "Error: Creating user failed"})
+    }
+})
+
+// Login
 router.post('/login', async (req, res) => {
-    const user = await prisma.user.findUnique({
+    console.log("Body", req.body);
+    try {
+        const user = await prisma.user.findUnique({
         where: { email: req.body.email }
     })
 
@@ -33,6 +60,12 @@ router.post('/login', async (req, res) => {
     }, process.env.JWT_SECRET, {expiresIn: '30d'})
 
     res.send({msg: "Login OK", jwt: token})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({msg: "Error :("})
+    }
+
+    
 })
 
 router.post('/', async (req, res) => {
