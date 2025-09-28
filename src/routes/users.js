@@ -9,7 +9,6 @@ const prisma = new PrismaClient()
 
 //Register new user
 router.post('/register', async (req, res) => {
-    console.log("Body", req.body)
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 12) //password+salt
         const newUser = await prisma.user.create({
@@ -19,7 +18,17 @@ router.post('/register', async (req, res) => {
                 name: req.body.name
             }
         })
-        res.json({msg: "New user created", username: newUser.name})
+        const user = await prisma.user.findUnique({
+            where: {email: req.body.email}
+        })
+        const token = await jwt.sign({
+        sub: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+    }, process.env.JWT_SECRET, {expiresIn: '30d'})
+
+    res.send({msg: "Login OK", jwt: token})
     } catch (error) {
         console.log(error)
         res.status(500).send({msg: "Error: Creating user failed"})
