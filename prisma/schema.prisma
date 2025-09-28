@@ -13,6 +13,10 @@ model notes {
   note       String?   @db.VarChar
   created_at DateTime? @default(now()) @db.Timestamp(6)
   updated_at DateTime? @default(now()) @db.Timestamp(6)
+  unique_id  String?   @unique @db.VarChar
+  color      String?   @db.VarChar
+  position_y Int?
+  position_x Int?
 }
 
 model user {

@@ -13,7 +13,7 @@ console.log(`Node.js ${process.version}`)
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.json({ msg: "Lektionsexempel 0.3" })
+    res.json({ msg: "NoteApp-Api" })
 })
 
 const notesRouter = require('./routes/notes')
@@ -21,6 +21,9 @@ app.use('/notes', notesRouter)
 
 const usersRouter = require('./routes/users')
 app.use('/users', usersRouter)
+
+const authRouter = require ('./routes/auth')
+app.use('/auth', authRouter)
 
 
 app.listen(PORT, () => {
