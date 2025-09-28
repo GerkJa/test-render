@@ -7,12 +7,6 @@ require('dotenv').config()
 const router = express.Router()
 const prisma = new PrismaClient()
 
-//Test to see if db connects table --- Remove!!
-router.get('/test', async (req, res) => {
-    const users = await prisma.user.findMany({})
-    res.json(users)
-})
-
 //Register new user
 router.post('/register', async (req, res) => {
     console.log("Body", req.body)
